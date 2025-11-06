@@ -1,0 +1,71 @@
+# ICE CREAM REVENUE PREDICTION PROJECT (USER INPUT VERSION)
+# by Nithish
+
+# ✅ Step 0: Install required libraries (auto install if missing)
+try:
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import LinearRegression
+except ModuleNotFoundError:
+    import os
+    os.system('pip install pandas matplotlib scikit-learn')
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import LinearRegression
+
+# ✅ Step 1: Create dataset
+data = {
+    'Temperature': [28, 30, 33, 35, 38],
+    'Flavor': ['Vanilla', 'Chocolate', 'Strawberry', 'Mango', 'Butterscotch'],
+    'Revenue': [420.50, 470.25, 515.80, 562.40, 610.75]
+}
+
+df = pd.DataFrame(data)
+
+print("🍦 Ice Cream Revenue Dataset")
+print(df)
+
+# ✅ Step 2: Train Linear Regression Model
+X = df[['Temperature']]
+y = df['Revenue']
+
+model = LinearRegression()
+model.fit(X, y)
+
+# ✅ Step 3: Get user input
+print("\n🔮 Let's Predict Ice Cream Revenue!")
+try:
+    temp = float(input("Enter today's temperature (°C): "))
+except ValueError:
+    print("⚠️ Please enter a valid number for temperature.")
+    exit()
+
+print("Available Flavors: Vanilla, Chocolate, Strawberry, Mango, Butterscotch")
+flavor = input("Enter ice cream flavor: ").capitalize()
+
+if flavor not in df['Flavor'].values:
+    print("⚠️ Invalid flavor! Please choose from the available list.")
+    exit()
+
+# ✅ Step 4: Predict revenue
+predicted = model.predict([[temp]])[0]
+
+# ✅ Step 5: Display result
+print("\n📊 Predicted Revenue Details:")
+print("----------------------------------------")
+print(f"Temperature: {temp}°C")
+print(f"Flavor: {flavor}")
+print(f"Predicted Revenue: ₹{predicted:.2f}")
+print("----------------------------------------")
+
+# ✅ Step 6: Visualization
+plt.figure(figsize=(8,5))
+plt.scatter(df['Temperature'], df['Revenue'], color='blue', label='Actual Revenue')
+plt.plot(df['Temperature'], model.predict(df[['Temperature']]), color='red', label='Regression Line')
+plt.scatter(temp, predicted, color='green', s=100, label='Your Prediction')
+plt.title('Ice Cream Revenue Prediction')
+plt.xlabel('Temperature (°C)')
+plt.ylabel('Revenue (₹)')
+plt.legend()
+plt.grid(True)
+plt.show()
